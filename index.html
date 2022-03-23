@@ -1,11 +1,12 @@
 <div>
 	<h2>Bookmarklet - eInvoice-ComConvert</h2>
 	<h3>Drag button to Bookmark Bar:</h3>
-	<a href="" class="bookmarklet" id="bookmarklet">eInvoice-ComConvert-1.0</a>
+	<a href="" class="bookmarklet" id="bookmarklet">eInvoice-ComConvert-1.1</a>
 </div>
-<h3><strong>Dùng để Chuyển đổi 32 sang 78</strong></h3>
+<h3><strong>Dùng để cấu hình hàng loạt 32 sang 78</strong></h3>
 <p>1. Sử dụng bookmark tại trang <a href="https://quantridichvu-hddt.vnpt-invoice.com.vn/">https://quantridichvu-hddt.vnpt-invoice.com.vn/</a></p>
-<p>2. Click bookmark và điền tiêu đề Jira có URL chứa MST hoặc điền MST</p>
+<p>2. Click bookmark và điền danh sách comId vào textbox trên, mỗi comId 1 dòng</p>
+<p>3. Click Run now</p>
 
 <script>
 	function deploy(){
@@ -132,26 +133,6 @@
         return null;
     }
 
-    /* Set Id cho các template, nếu ko có sẵn thì set 0 */
-    setConfigId(templateName) {
-        try {
-            let id = this.comConfig[templateName].id;
-            return id;
-        } catch {
-            return "0";
-        }
-    }
-
-    /* Set Old Value cho template*/
-    setConfigOld(templateName) {
-        try {
-            let old = this.comConfig[templateName].old;
-            return old;
-        } catch {
-            return null;
-        }
-    }
-
     /* Nội dung các template */
     initTemplate() {
         let template = {
@@ -211,7 +192,7 @@
                 let configOld = this.comConfig[key].old;
                 if (configOld) {
                     if (configOld[0] === '{' && configOld[configOld.length - 1] === '}') {
-                        template[key].value = this.JSONMerge(configOld, template[key].value);
+                        template[key].value = JSONMerge(configOld, template[key].value);
                     }
                     else if (template[key].keep) {
                         delete template[key];
@@ -226,61 +207,6 @@
 
     }
 
-    /* Merge 2 string JSON với nhau, overwrite=false: giữ value cũ nếu trùng key */
-    JSONMerge(str1, str2, overwrite = false) {
-        str1 = str1.replace(/'/g, '"');
-        str2 = str2.replace(/'/g, '"');
-        let json1 = JSON.parse(str1);
-        let json2 = JSON.parse(str2);
-        let result = json1;
-        for (let key in json2) {
-            if (!result[key] || overwrite == true) {
-                result[key] = json2[key];
-            }
-        }
-        return JSON.stringify(result);
-    }
-
-    /* convert JSON object to  FormData */
-    objectToFormData(obj, rootName, ignoreList) {
-        var formData = new FormData();
-        function appendFormData(data, root) {
-            if (!ignore(root)) {
-                root = root || "";
-                if (data instanceof File) {
-                    formData.append(root, data);
-                } else if (Array.isArray(data)) {
-                    for (let data_i = 0; data_i < data.length; data_i++) {
-                        appendFormData(data[data_i], root + "[" + data_i + "]");
-                    }
-                } else if (typeof data === "object" && data) {
-                    for (var key in data) {
-                        if (data.hasOwnProperty(key)) {
-                            if (root === "") {
-                                appendFormData(data[key], key);
-                            } else {
-                                appendFormData(data[key], root + "." + key);
-                            }
-                        }
-                    }
-                } else {
-                    if (data !== null && typeof data !== "undefined") {
-                        formData.append(root, data);
-                    }
-                }
-            }
-        }
-        function ignore(root) {
-            return (
-                Array.isArray(ignoreList) &&
-                ignoreList.some(function (x) {
-                    return x === root;
-                })
-            );
-        }
-        appendFormData(obj, rootName);
-        return formData;
-    }
 
     /* Post data của 1 template gồm {this.comId, template.id, templateName, template.value} */
     async sendData(templateName) {
@@ -400,81 +326,6 @@ function newElement(tag, isBlock, { ...attArray }) {
     return newElement;
 }
 
-let wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-async function process() {
-    let ComArr = document.getElementById('_ext_txtInput').value.split(String.fromCharCode(10));
-    for (let i = 0; i < ComArr.length; i++) {
-        let comInfo = await new ComInfo(ComArr[i]);
-        document.getElementById("_ext_txtOutput").value += comInfo.comId + String.fromCharCode(9) + comInfo.comName + String.fromCharCode(9) + comInfo.comTaxCode + String.fromCharCode(9);
-        console.log(comInfo);
-        if (comInfo.comId && comInfo.comName && comInfo.comTaxCode) {
-            let success = "OK";
-            for (let templateName in comInfo.template) {
-                let status = await comInfo.sendData(templateName);
-                if (status === false){
-                    success = "FAILED";
-                }
-                await wait(100);
-            }
-            document.getElementById("_ext_txtOutput").value += success + String.fromCharCode(10);
-        }
-        else {
-            document.getElementById("_ext_txtOutput").value += "FAILED" + String.fromCharCode(10);
-        }
-
-        await wait(100);
-    }
-
-}
-
-
-
-if (document.URL.indexOf("quantridichvu-hddt.vnpt-invoice.com.vn") > 0) {
-    creatPopup();
-} else if (
-    document.URL.indexOf("cdpn.io") < 0 &&
-    document.URL.indexOf("vscode") < 0
-) {
-    window.open(
-        "https://quantridichvu-hddt.vnpt-invoice.com.vn/Initialization/CustomersTest?keyword=&areaId=0&sysType=0&statustype=12"
-    );
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-async function requestTemplateList(comInfo) {
-    let urlTemplateList = "/RegisterTemp/GetReg";
-    let header = {
-        "content-type": "ajax/json"
-    };
-    /* https://quantridichvu-hddt.vnpt-invoice.com.vn/RegisterTemp/Edit/276ed4d5-01a6-4c61-a3ec-ae51010acd66?IdCus=0231f303-a315-41cb-96de-ae2a00b11ceb */
-    let responseTemplateList = await fetch(urlTemplateList, {
-        header: header,
-        body: { id: comInfo.comId },
-        method: "POST"
-    });
-    let dataTemplateList = await responseTemplateList.text();
-    console.log("dataTemplateList:", dataTemplateList);
-}
-
 /* convert JSON object to  FormData */
 function objectToFormData(obj, rootName, ignoreList) {
     var formData = new FormData();
@@ -516,71 +367,55 @@ function objectToFormData(obj, rootName, ignoreList) {
     return formData;
 }
 
-
-/* Dùng để lấy toàn bộ danh sách công ty */
-async function mergeRows() {
-    let site = {
-        pageLink: "/Initialization/CustomersReal?areaId=15&statustype=34&sysType=0&initType=0&page=",
-        pageLast: ".paginate_button:nth-last-child(2) a",
-        row: ".panel-body .table tr",
-        outputBlock: ".panel-body .table tbody"
-    };
-    try {
-        let pages = document.querySelector(site.pageLast).innerText;
-        if (!pages) {
-            return false;
+/* Merge 2 string JSON với nhau, overwrite=false: giữ value cũ nếu trùng key */
+function JSONMerge(str1, str2, overwrite = false) {
+    str1 = str1.replace(/'/g, '"');
+    str2 = str2.replace(/'/g, '"');
+    let json1 = JSON.parse(str1);
+    let json2 = JSON.parse(str2);
+    let result = json1;
+    for (let key in json2) {
+        if (!result[key] || overwrite == true) {
+            result[key] = json2[key];
         }
-        console.log("pages::", pages);
-        let outputBlock = document.querySelector(site.outputBlock);
-        if (!outputBlock) {
-            return false;
-        }
-        for (let i = 2; i <= parseInt(pages); i++) {
-            let href = site.pageLink + i;
-            let response = await getRawHtml(href);
-
-            let tempdiv = document.createElement("div");
-            tempdiv.innerHTML = response.substring(
-                response.indexOf("<body"),
-                response.indexOf("</body>") + 7
-            );
-
-            let rows = tempdiv.querySelectorAll(site.row);
-            if (!rows) {
-                continue;
-            }
-            console.log("rows::", rows);
-            for (let j = 1; j < rows.length; j++) {
-                outputBlock.appendChild(rows[j]);
-            }
-        }
-        return true;
-    } catch (e) {
-        console.log(e);
-        return false;
     }
-}
-async function getRawHtml(url) {
-    console.log("getRawHtml::start", url);
-    let header = {
-        "content-type":
-            "application/x-www-form-urlencoded; charset=UTF-8; boundary=---------------------------" +
-            Date.now().toString(16),
-        accept:
-            "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-        "content-encoding": "gzip"
-    };
-
-    let response = await fetch(url, {
-        header: header,
-        method: "GET"
-    });
-    let data = await response.text();
-    console.log("getRawHtml::end", response.status);
-    return data;
+    return JSON.stringify(result);
 }
 
+async function process() {
+    let ComArr = document.getElementById('_ext_txtInput').value.split(String.fromCharCode(10));
+    for (let i = 0; i < ComArr.length; i++) {
+        let comInfo = await new ComInfo(ComArr[i]);
+        document.getElementById("_ext_txtOutput").value += comInfo.comId + String.fromCharCode(9) + comInfo.comName + String.fromCharCode(9) + comInfo.comTaxCode + String.fromCharCode(9);
+        console.log(comInfo);
+        if (comInfo.comId && comInfo.comName && comInfo.comTaxCode) {
+            let success = "OK";
+            for (let templateName in comInfo.template) {
+                let status = await comInfo.sendData(templateName);
+                if (status === false){
+                    success = "FAILED::" + templateName;
+                    break;
+                }
+            }
+            document.getElementById("_ext_txtOutput").value += success + String.fromCharCode(10);
+        }
+        else {
+            document.getElementById("_ext_txtOutput").value += "FAILED::ComInfo" + String.fromCharCode(10);
+        }
+    }
 
+}
+
+if (document.URL.indexOf("quantridichvu-hddt.vnpt-invoice.com.vn") > 0) {
+    creatPopup();
+} else if (
+    document.URL.indexOf("cdpn.io") < 0 &&
+    document.URL.indexOf("vscode") < 0
+) {
+    window.open(
+        "https://quantridichvu-hddt.vnpt-invoice.com.vn/Initialization/CustomersTest?keyword=&areaId=0&sysType=0&statustype=12"
+    );
+}
 `;
 	}	
 	document.getElementById('bookmarklet').setAttribute("href", 'javascript:(function(){' + deploy() + '}())');	
