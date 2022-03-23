@@ -122,76 +122,81 @@ class ComInfo {
 
     /* Nội dung các template */
     initTemplate() {
-        let template = {
-            "MessagerMail": {
-                /* 3 TokenChung */
-                value: '[subject]Hóa đơn điện tử mua hàng hóa, dịch vụ tại ' + this.comName + '[/subject][body]<p>Kính gửi:<b>$NameCustomer</b></p><p>Mã số thuế: $CusTaxCode</p><p>Đơn vị $company vừa $type hóa đơn điện tử $InvMonth của Quý khách hàng. Thông tin hóa đơn như sau:</p><ul><li>Mẫu số hóa đơn: $pattern</li><li>Ký hiệu hóa đơn: $serial</li><li>Số hóa đơn: $invNumber</li><li>Mã tra cứu: $fkey</li></ul><p>Quý khách vui lòng bấm vào <a href="$invoiceUrl"><span> "Đây"</span></a> để lấy hóa đơn hoặc Đăng nhập vào website: https://' + this.comTaxCode + '.vnpt-invoice.com.vn, nhập mã tra cứu: $fkey</p><p>Để tải hóa đơn dạng PDF: Nhấp chuột tại <a href="$pdfUrl"><span> "Đây"</span></a></p><p>Để tải hóa đơn dạng XML: Nhấp chuột tại <a href="$fileUrl"><span> "Đây"</span></a></p><p>VNPT-Vinaphone xin trân trọng cảm ơn Quý khách hàng đã tin tưởng sử dụng và hợp tác với giải pháp hóa đơn điện tử VNPT-Invoice. Mọi vướng mắc về phần mềm vui lòng liên hệ với chúng tôi : VNPT Bà Rịa - Vũng Tàu - Chi nhánh Tổng công ty Dịch vụ viễn thông VNPT-Vinaphone (0254800126 - 02543819818) để được giải quyết nhanh nhất.</p><p><b style="color: #FF0000;">Chú ý: Đây là mail tự động từ hệ thống. Vui lòng không reply!<b></p><p>Trân trọng ./.</p>[/body]'
-            },
-            "SendAdjust": {
-                /* 14 SendAdjust */
-                value: "1"
-            },
-            "SendReplace": {
-                /* 15 SendReplace */
-                value: "1"
-            },
-            "SendCancel": {
-                /* 16 SendCancel */
-                value: "1"
-            },
-            "MessagerCancel": {
-                /* 17 MessagerCancel */
-                value: '[subject] ' + this.comName + ' - Thông báo về việc hủy hóa đơn[/subject][body]Kính gửi Quý khách hàng,<br/>$CompanyName vừa hủy hóa đơn của Quý khách hàng.<br/>Hóa đơn hủy số: $invNumber thuộc mẫu: $pattern và ký hiệu $serial<br/>Quý Khách lưu ý, đây là email phản hồi tự động vui lòng không trả lời email này.<br/>Trân trọng ./.[/body]'
-            },
-            "SendEmailAdjustReplace": {
-                /* 18 SendEmailAdjustReplace */
-                value: "1"
-            },
-            "MessagerReplace": {
-                /* 19 TokenChung */
-                value: '[subject]Hóa đơn điện tử mua hàng hóa, dịch vụ tại ' + this.comName + '[/subject][body]Kính gửi: Quý khách hàng,<br/>Cảm ơn Quý khách đã mua hàng hóa, sử dụng dịch vụ của $CompanyName.<br/>Hóa đơn điện tử mua hàng hóa, dịch vụ của Quý khách đã được phát hành với các thông tin như sau: <ul> <li>Mẫu số: $Newpattern</li> <li>Ký hiệu hóa đơn: $NewSerial</li> <li>Số hóa đơn: $NewInvMumber</li> <li>Trạng thái: Đã thay thế cho hóa đơn số $invNumber</li><li>Tra cứu hóa đơn tại đường link: https://' + this.comTaxCode + '.vnpt-invoice.com.vn – nhập mã tra cứu: $NewFkey</li></ul>Ghi chú: Hóa đơn điện tử có giá trị pháp lý tương đương với hóa đơn giấy.<br/>Đây là Email tự động, Quý khách vui lòng không trả lời lại Email này.<br/>Giải pháp Hóa đơn điện tử được cung cấp bởi VNPT, Quý khách có nhu cầu sử dụng hóa đơn điện tử cho công ty mình, vui lòng liên hệ Hotline: 18001260.[/body]'
-            },
-            "MessagerAdjust": {
-                /* 20 TokenChung */
-                value: '[subject]Hóa đơn điện tử mua hàng hóa, dịch vụ tại ' + this.comName + '[/subject][body] Kính gửi: Quý khách hàng,<br/>Cảm ơn Quý khách đã mua hàng hóa, sử dụng dịch vụ của $CompanyName.<br/>Hóa đơn điện tử mua hàng hóa, dịch vụ của Quý khách đã được phát hành với các thông tin như sau:<ul><li>Mẫu số: $Newpattern</li><li>Ký hiệu hóa đơn: $NewSerial</li><li>Số hóa đơn: $NewInvMumber</li><li>Trạng thái: Đã điều chỉnh cho hóa đơn số $invNumber</li><li>Tra cứu hóa đơn tại đường link: https://' + this.comTaxCode + '.vnpt-invoice.com.vn – nhập mã tra cứu: $NewFkey</li></ul>Ghi chú: Hóa đơn điện tử có giá trị pháp lý tương đương với hóa đơn giấy.<br/>Đây là Email tự động, Quý khách vui lòng không trả lời lại Email này.<br/>Giải pháp Hóa đơn điện tử được cung cấp bởi VNPT, Quý khách có nhu cầu sử dụng hóa đơn điện tử cho công ty mình, vui lòng liên hệ Hotline: 18001260.[/body]'
-            },
-            "ConfigViewHAIINVVAT": {
-                /* 24 ConfigViewHAIINVVAT VATRate+BehindComma*/
-                value: '{"VATRate":"-2=Không kê khai và nộp thuế;-1=Không thuế GTGT;0=0%;5=5%;8=8%;10=10%","BehindComma":"ProdQuantity=2;ProdPrice=2"}'
-            },
-            "BehindComma": {
-                /* 25 BehindComma: ProdQuantity=2;ProdPrice=2*/
-                value: 'ProdQuantity=2;ProdPrice=2',
-                keep: true
-            },
-            "VATRateView": {
-                /* 26 VATRateView: 0=0;2=2;5=5;8=8;10=10;-1=Không thuế GTGT*/
-                value: '0=0;2=2;5=5;8=8;10=10;-2=Không kê khai và nộp thuế;-1=Không thuế GTGT'
-            },
-            "ConfigViewHAIINVVATTT78": {
-                /* 28 ConfigViewHAIINVVATTT78*/
-                value: '{"BehindComma":"ProdQuantity=3;ProdPrice=5;ProdTotal=2;Total=2;VATAmount=2;Amount=0;ProdQuantityUSD=3;ProdPriceUSD=2","VATRate":"-2=Không kê khai và nộp thuế;-1=Không thuế GTGT;0=0%;5=5%;8=8%;10=10%","PaymentMethod":"KTT=Không thu tiền;TM=Thanh toán tiền mặt;CK=Thanh toán chuyển khoản;TTD=Thanh toán thẻ tín dụng;HDDT=Hình thức HDDT;TM/CK=Hình thức thanh toán tiền mặt hoặc chuyển khoản;BT=Thanh toán bù trừ","CurrencyUnit":"VND=Hoá đơn Việt Nam đồng;USD=Hoá đơn Đô-la Mỹ;EUR=Hóa đơn EURO"}'
-            }
-        };
-        for (let key in template) {
-            if (this.comConfig[key]) {
-                template[key].id = this.comConfig[key].id || "0";
-                let configOld = this.comConfig[key].old;
-                if (configOld) {
-                    if (configOld[0] === '{' && configOld[configOld.length - 1] === '}') {
-                        template[key].value = JSONMerge(configOld, template[key].value);
-                    }
-                    else if (template[key].keep) {
-                        delete template[key];
+        try{
+            let template = {
+                "MessagerMail": {
+                    /* 3 TokenChung */
+                    value: '[subject]Hóa đơn điện tử mua hàng hóa, dịch vụ tại ' + this.comName + '[/subject][body]<p>Kính gửi:<b>$NameCustomer</b></p><p>Mã số thuế: $CusTaxCode</p><p>Đơn vị $company vừa $type hóa đơn điện tử $InvMonth của Quý khách hàng. Thông tin hóa đơn như sau:</p><ul><li>Mẫu số hóa đơn: $pattern</li><li>Ký hiệu hóa đơn: $serial</li><li>Số hóa đơn: $invNumber</li><li>Mã tra cứu: $fkey</li></ul><p>Quý khách vui lòng bấm vào <a href="$invoiceUrl"><span> "Đây"</span></a> để lấy hóa đơn hoặc Đăng nhập vào website: https://' + this.comTaxCode + '.vnpt-invoice.com.vn, nhập mã tra cứu: $fkey</p><p>Để tải hóa đơn dạng PDF: Nhấp chuột tại <a href="$pdfUrl"><span> "Đây"</span></a></p><p>Để tải hóa đơn dạng XML: Nhấp chuột tại <a href="$fileUrl"><span> "Đây"</span></a></p><p>VNPT-Vinaphone xin trân trọng cảm ơn Quý khách hàng đã tin tưởng sử dụng và hợp tác với giải pháp hóa đơn điện tử VNPT-Invoice. Mọi vướng mắc về phần mềm vui lòng liên hệ với chúng tôi : VNPT Bà Rịa - Vũng Tàu - Chi nhánh Tổng công ty Dịch vụ viễn thông VNPT-Vinaphone (0254800126 - 02543819818) để được giải quyết nhanh nhất.</p><p><b style="color: #FF0000;">Chú ý: Đây là mail tự động từ hệ thống. Vui lòng không reply!<b></p><p>Trân trọng ./.</p>[/body]'
+                },
+                "SendAdjust": {
+                    /* 14 SendAdjust */
+                    value: "1"
+                },
+                "SendReplace": {
+                    /* 15 SendReplace */
+                    value: "1"
+                },
+                "SendCancel": {
+                    /* 16 SendCancel */
+                    value: "1"
+                },
+                "MessagerCancel": {
+                    /* 17 MessagerCancel */
+                    value: '[subject] ' + this.comName + ' - Thông báo về việc hủy hóa đơn[/subject][body]Kính gửi Quý khách hàng,<br/>$CompanyName vừa hủy hóa đơn của Quý khách hàng.<br/>Hóa đơn hủy số: $invNumber thuộc mẫu: $pattern và ký hiệu $serial<br/>Quý Khách lưu ý, đây là email phản hồi tự động vui lòng không trả lời email này.<br/>Trân trọng ./.[/body]'
+                },
+                "SendEmailAdjustReplace": {
+                    /* 18 SendEmailAdjustReplace */
+                    value: "1"
+                },
+                "MessagerReplace": {
+                    /* 19 TokenChung */
+                    value: '[subject]Hóa đơn điện tử mua hàng hóa, dịch vụ tại ' + this.comName + '[/subject][body]Kính gửi: Quý khách hàng,<br/>Cảm ơn Quý khách đã mua hàng hóa, sử dụng dịch vụ của $CompanyName.<br/>Hóa đơn điện tử mua hàng hóa, dịch vụ của Quý khách đã được phát hành với các thông tin như sau: <ul> <li>Mẫu số: $Newpattern</li> <li>Ký hiệu hóa đơn: $NewSerial</li> <li>Số hóa đơn: $NewInvMumber</li> <li>Trạng thái: Đã thay thế cho hóa đơn số $invNumber</li><li>Tra cứu hóa đơn tại đường link: https://' + this.comTaxCode + '.vnpt-invoice.com.vn – nhập mã tra cứu: $NewFkey</li></ul>Ghi chú: Hóa đơn điện tử có giá trị pháp lý tương đương với hóa đơn giấy.<br/>Đây là Email tự động, Quý khách vui lòng không trả lời lại Email này.<br/>Giải pháp Hóa đơn điện tử được cung cấp bởi VNPT, Quý khách có nhu cầu sử dụng hóa đơn điện tử cho công ty mình, vui lòng liên hệ Hotline: 18001260.[/body]'
+                },
+                "MessagerAdjust": {
+                    /* 20 TokenChung */
+                    value: '[subject]Hóa đơn điện tử mua hàng hóa, dịch vụ tại ' + this.comName + '[/subject][body] Kính gửi: Quý khách hàng,<br/>Cảm ơn Quý khách đã mua hàng hóa, sử dụng dịch vụ của $CompanyName.<br/>Hóa đơn điện tử mua hàng hóa, dịch vụ của Quý khách đã được phát hành với các thông tin như sau:<ul><li>Mẫu số: $Newpattern</li><li>Ký hiệu hóa đơn: $NewSerial</li><li>Số hóa đơn: $NewInvMumber</li><li>Trạng thái: Đã điều chỉnh cho hóa đơn số $invNumber</li><li>Tra cứu hóa đơn tại đường link: https://' + this.comTaxCode + '.vnpt-invoice.com.vn – nhập mã tra cứu: $NewFkey</li></ul>Ghi chú: Hóa đơn điện tử có giá trị pháp lý tương đương với hóa đơn giấy.<br/>Đây là Email tự động, Quý khách vui lòng không trả lời lại Email này.<br/>Giải pháp Hóa đơn điện tử được cung cấp bởi VNPT, Quý khách có nhu cầu sử dụng hóa đơn điện tử cho công ty mình, vui lòng liên hệ Hotline: 18001260.[/body]'
+                },
+                "ConfigViewHAIINVVAT": {
+                    /* 24 ConfigViewHAIINVVAT VATRate+BehindComma*/
+                    value: '{"VATRate":"-2=Không kê khai và nộp thuế;-1=Không thuế GTGT;0=0%;5=5%;8=8%;10=10%","BehindComma":"ProdQuantity=2;ProdPrice=2"}'
+                },
+                "BehindComma": {
+                    /* 25 BehindComma: ProdQuantity=2;ProdPrice=2*/
+                    value: 'ProdQuantity=2;ProdPrice=2',
+                    keep: true
+                },
+                "VATRateView": {
+                    /* 26 VATRateView: 0=0;2=2;5=5;8=8;10=10;-1=Không thuế GTGT*/
+                    value: '0=0;2=2;5=5;8=8;10=10;-2=Không kê khai và nộp thuế;-1=Không thuế GTGT'
+                },
+                "ConfigViewHAIINVVATTT78": {
+                    /* 28 ConfigViewHAIINVVATTT78*/
+                    value: '{"BehindComma":"ProdQuantity=3;ProdPrice=5;ProdTotal=2;Total=2;VATAmount=2;Amount=0;ProdQuantityUSD=3;ProdPriceUSD=2","VATRate":"-2=Không kê khai và nộp thuế;-1=Không thuế GTGT;0=0%;5=5%;8=8%;10=10%","PaymentMethod":"KTT=Không thu tiền;TM=Thanh toán tiền mặt;CK=Thanh toán chuyển khoản;TTD=Thanh toán thẻ tín dụng;HDDT=Hình thức HDDT;TM/CK=Hình thức thanh toán tiền mặt hoặc chuyển khoản;BT=Thanh toán bù trừ","CurrencyUnit":"VND=Hoá đơn Việt Nam đồng;USD=Hoá đơn Đô-la Mỹ;EUR=Hóa đơn EURO"}'
+                }
+            };
+            for (let key in template) {
+                if (this.comConfig[key]) {
+                    template[key].id = this.comConfig[key].id || "0";
+                    let configOld = this.comConfig[key].old;
+                    if (configOld) {
+                        if (configOld[0] === '{' && configOld[configOld.length - 1] === '}') {
+                            template[key].value = JSONMerge(configOld, template[key].value);
+                        }
+                        else if (template[key].keep) {
+                            delete template[key];
+                        }
                     }
                 }
-            }
-            else {
-                template[key].id = "0";
-            }
-        };
-        return template;
-
+                else {
+                    template[key].id = "0";
+                }
+            };
+            return template;
+        }
+        catch(e){
+            console.log("initTemplate::", e);
+        }
+        return null;
     }
 
 
@@ -368,7 +373,9 @@ function JSONMerge(str1, str2, overwrite = false) {
             str1 = str1.replace(/Δ/g, "'");
             json1 = JSON.parse(str1); 
         }
-        catch(e){};
+        catch(e){
+            console.log("JSONMerge::json1::", e);
+        };
     };
     
     try {
@@ -382,15 +389,23 @@ function JSONMerge(str1, str2, overwrite = false) {
             str2 = str2.replace(/Δ/g, "'");
             json2 = JSON.parse(str2); 
         }
-        catch(e){};
+        catch(e){
+            console.log("JSONMerge::json2::", e);
+        };
     };
-    let result = json1;
-    for (let key in json2) {
-        if (!result[key] || overwrite == true) {
-            result[key] = json2[key];
+    try{
+        let result = json1;
+        for (let key in json2) {
+            if (!result[key] || overwrite == true) {
+                result[key] = json2[key];
+            }
         }
+        return JSON.stringify(result);
     }
-    return JSON.stringify(result);
+    catch(e){
+        console.log("JSONMerge::merge::", e);
+    }
+    return null;
 }
 
 async function process() {
@@ -399,7 +414,7 @@ async function process() {
         let comInfo = await new ComInfo(ComArr[i]);
         document.getElementById("_ext_txtOutput").value += comInfo.comId + String.fromCharCode(9) + comInfo.comName + String.fromCharCode(9) + comInfo.comTaxCode + String.fromCharCode(9);
         console.log(comInfo);
-        if (comInfo.comId && comInfo.comName && comInfo.comTaxCode) {
+        if (comInfo.comId && comInfo.comName && comInfo.comTaxCode && comInfo.template) {
             let success = "OK";
             for (let templateName in comInfo.template) {
                 let status = await comInfo.sendData(templateName);
