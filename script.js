@@ -180,7 +180,13 @@ class ComInfo {
                     let configOld = this.comConfig[key].old;
                     if (configOld) {
                         if (configOld[0] === '{' && configOld[configOld.length - 1] === '}') {
-                            template[key].value = JSONMerge(configOld, template[key].value);
+                            let _jsonmerge = JSONMerge(configOld, template[key].value);
+                            if (_jsonmerge){
+                                template[key].value = _jsonmerge;
+                            }
+                            else{
+                                return null;
+                            }                            
                         }
                         else if (template[key].keep) {
                             delete template[key];
