@@ -102,7 +102,7 @@ class ComInfo {
         let str = this.comConfig['PublishDomain'].old;
         try {
             /* https://3502427224-002-democadmin.vnpt-invoice.com.vn */
-            let reg = /https:\\\/\\\/([\\\d-]+)(demo|tt78)?cadmin/g;
+            let reg = /https:\\\/\\\/([\\\d-]+)(demo|tt78|tt78demo)?cadmin/g;
             result = reg.exec(str)[1];
             if (result && result[result.length - 1] === '-') {
                 result = result.substring(0, result.length - 1).trim();
@@ -112,7 +112,7 @@ class ComInfo {
         } catch (e) { console.log("Not Token", e) }
         try {
             /* https://bqlchohuyenlongdienadmin.vnpt-invoice.com.vn */
-            let regHSM = /https:\\\/\\\/([a-z0-9]+)admin/g;
+            let regHSM = /https:\\\/\\\/([a-z0-9]+)(-tt78)?admin/g;
             result = regHSM.exec(str)[1];
             if (result != "")
                 return result;
