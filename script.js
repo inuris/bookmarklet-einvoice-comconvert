@@ -367,6 +367,7 @@ function objectToFormData(obj, rootName, ignoreList) {
 
 /* Merge 2 string JSON với nhau, overwrite=false: giữ value cũ nếu trùng key */
 function JSONMerge(str1, str2, overwrite = false) {
+    let tempStr;
     let json1, json2;
     try {
         json1 = JSON.parse(str1);        
@@ -374,26 +375,47 @@ function JSONMerge(str1, str2, overwrite = false) {
     catch(e){};
     if (!json1){
         try{
-            str1 = str1.replace(/"/g, 'Δ');
-            str1 = str1.replace(/'/g, '"');
-            str1 = str1.replace(/Δ/g, "'");
-            json1 = JSON.parse(str1); 
+            tempStr = str1;
+            tempStr = tempStr.replace(/'/g, '"');
+            json1 = JSON.parse(tempStr); 
         }
         catch(e){
             console.log("JSONMerge::json1::", e);
         };
     };
-    
+    if (!json1){
+        try{
+            tempStr = str1;
+            tempStr = tempStr.replace(/"/g, 'Δ');
+            tempStr = tempStr.replace(/'/g, '"');
+            tempStr = tempStr.replace(/Δ/g, "'");
+            json1 = JSON.parse(tempStr); 
+        }
+        catch(e){
+            console.log("JSONMerge::json1::", e);
+        };
+    };
     try {
         json2 = JSON.parse(str2);        
     }
     catch(e){};
     if (!json2){
         try{
-            str2 = str2.replace(/"/g, 'Δ');
-            str2 = str2.replace(/'/g, '"');
-            str2 = str2.replace(/Δ/g, "'");
-            json2 = JSON.parse(str2); 
+            tempStr = str2;
+            tempStr = tempStr.replace(/'/g, '"');
+            json2 = JSON.parse(tempStr); 
+        }
+        catch(e){
+            console.log("JSONMerge::json2::", e);
+        };
+    };
+    if (!json2){
+        try{
+            tempStr = str2;
+            tempStr = tempStr.replace(/"/g, 'Δ');
+            tempStr = tempStr.replace(/'/g, '"');
+            tempStr = tempStr.replace(/Δ/g, "'");
+            json2 = JSON.parse(tempStr); 
         }
         catch(e){
             console.log("JSONMerge::json2::", e);
